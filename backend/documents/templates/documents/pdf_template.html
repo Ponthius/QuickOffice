@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 13px; color: #111; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .logo { height: 70px; }
+  .company-name { font-size: 22px; font-weight: bold; margin: 0; }
+  .tagline { margin: 0; }
+  .doc-title { font-size: 20px; font-weight: bold; text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th, td { border: 1px solid #000; padding: 6px 8px; text-align: left; }
+  .box { border: 1px solid #000; padding: 10px; width: 48%; }
+  .row { display: flex; justify-content: space-between; margin-top: 15px; }
+  .signature-img { height: 50px; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      {% if profile.logo %}<img class="logo" src="{{ profile.logo.path }}">{% endif %}
+      <p class="company-name">{{ profile.company_name }}</p>
+      <p class="tagline">{{ profile.tagline }}</p>
+    </div>
+    <div>
+      <p>Tel: {{ profile.phone_1 }} {{ profile.phone_2 }}</p>
+      <p>{{ profile.address }}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="box">
+      <p><strong>M/s:</strong> {{ doc.client_name }}</p>
+      <p>{{ doc.job_description }}</p>
+      <p><strong>Address:</strong> {{ doc.client_address }}</p>
+    </div>
+    <div class="box">
+      <p class="doc-title">{{ doc.get_doc_type_display }}</p>
+      <p><strong>No:</strong> {{ doc.doc_number }}</p>
+      <p><strong>Date:</strong> {{ doc.date }}</p>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>QTY</th><th>PARTICULARS</th><th>RATE (UGX)</th><th>AMOUNT (UGX)</th></tr>
+    {% for item in doc.items.all %}
+    <tr>
+      <td>{{ item.qty }}</td>
+      <td>{{ item.particulars }}</td>
+      <td>{{ item.rate }}</td>
+      <td>{{ item.amount }}</td>
+    </tr>
+    {% endfor %}
+    <tr><td colspan="3"><strong>TOTAL</strong></td><td>{{ doc.total }}</td></tr>
+  </table>
+
+  <p><strong>Amount in words:</strong> {{ doc.amount_in_words }}</p>
+
+  <div class="row">
+    <div></div>
+    <div>
+      {% if profile.signature %}<img class="signature-img" src="{{ profile.signature.path }}">{% endif %}
+      <p>For & on behalf of {{ profile.company_name }}</p>
+    </div>
+  </div>
+</body>
+</html>
