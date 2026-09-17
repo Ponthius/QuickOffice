@@ -7,8 +7,10 @@ from django.http import HttpResponse
 from weasyprint import HTML
 from .models import Document, DocumentItem
 from .utils import next_doc_number, amount_to_words
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
-
+@csrf_exempt
 @api_view(["POST"])
 @permission_classes([])
 def login_view(request):
@@ -23,6 +25,7 @@ def login_view(request):
     return Response({"ok": False, "error": "Invalid credentials"}, status=401)
 
 
+@csrf_exempt
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_document(request):
