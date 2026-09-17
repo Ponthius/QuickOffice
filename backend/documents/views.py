@@ -1,10 +1,27 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from weasyprint import HTML
 from .models import Document, DocumentItem
 from .utils import next_doc_number, amount_to_words
+
+
+@api_view(["POST"])
+@permission_classes([])
+def login_view(request):
+    user = authenticate(
+        request,
+        username=request.data.get("username"),
+        password=request.data.get("password"),
+    )
+    if user is not None:
+        login(request, user)
+        return Response({"ok": True, "username": user.username})
+    return Response({"ok": False, "error": "Invalid credentials"}, status=401)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
