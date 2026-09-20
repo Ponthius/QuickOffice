@@ -9,6 +9,9 @@ from .models import Document, DocumentItem
 from .utils import next_doc_number, amount_to_words
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from rest_framework.parsers import MultiPartParser, FormParser
+from .serializers import CompanyProfileSerializer
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 
 @csrf_exempt
 @api_view(["POST"])
@@ -54,3 +57,16 @@ def create_document(request):
     response = HttpResponse(pdf, content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="{doc.doc_number}.pdf"'
     return response
+
+@csrf_exempt
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
+def profile_view(request):
+    profile, _ = CompanyProfile.objects.get_or_create(user=request.user)
+    if request.method == "GET":
+        return Response(CompanyProfileSerializer(profile, context={"request": request}).data)
+    serializer = CompanyProfileSerializer(profile, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)

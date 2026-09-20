@@ -23,6 +23,7 @@ export default function Home() {
           </Link>
         ))}
       </div>
+      <Link href="/settings" className="text-blue-600 text-sm">Company Settings</Link>
     </div>
   );
 }
