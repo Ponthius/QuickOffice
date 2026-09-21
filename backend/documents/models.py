@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class CompanyProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    company_name = models.CharField(max_length=200)
+    company_name = models.CharField(max_length=200, blank=True)
     tagline = models.CharField(max_length=200, blank=True)
     phone_1 = models.CharField(max_length=30, blank=True)
     phone_2 = models.CharField(max_length=30, blank=True)

@@ -128,7 +128,7 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 SESSION_COOKIE_SAMESITE = "Lax"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
+    "DEFAULT_AUTHENTICATION_CLASSES": ["documents.authentication.CsrfExemptSessionAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 CORS_ALLOW_CREDENTIALS = True

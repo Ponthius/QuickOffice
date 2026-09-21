@@ -7,17 +7,26 @@ export default function SettingsPage() {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [signatureFile, setSignatureFile] = useState<File | null>(null);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/profile/`, {
       credentials: "include",
     })
-      .then((r) => r.json())
-      .then(setProfile);
+      .then(async (r) => {
+        if (!r.ok) {
+          setError(`Could not load profile (status ${r.status}). Are you logged in?`);
+          return;
+        }
+        setProfile(await r.json());
+      });
   }, []);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
+    setSaved(false);
+
     const form = new FormData();
     form.append("company_name", profile.company_name || "");
     form.append("tagline", profile.tagline || "");
@@ -27,11 +36,19 @@ export default function SettingsPage() {
     if (logoFile) form.append("logo", logoFile);
     if (signatureFile) form.append("signature", signatureFile);
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/profile/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/profile/`, {
       method: "PATCH",
       credentials: "include",
       body: form,
     });
+
+    if (!res.ok) {
+      const body = await res.text();
+      setError(`Save failed (status ${res.status}): ${body}`);
+      return;
+    }
+
+    setProfile(await res.json());
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -44,14 +61,13 @@ export default function SettingsPage() {
       >
         <h1 className="text-xl font-bold mb-2">Company Settings</h1>
         {saved && <p className="text-green-600 text-sm">Saved!</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <input
           className="border rounded p-2"
           placeholder="Company Name"
           value={profile.company_name || ""}
-          onChange={(e) =>
-            setProfile({ ...profile, company_name: e.target.value })
-          }
+          onChange={(e) => setProfile({ ...profile, company_name: e.target.value })}
         />
         <input
           className="border rounded p-2"
@@ -80,27 +96,15 @@ export default function SettingsPage() {
 
         <label className="text-sm font-semibold mt-2">Logo</label>
         {profile.logo && <img src={profile.logo} className="h-16 mb-1" />}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
-        />
+        <input type="file" accept="image/*" onChange={(e) => setLogoFile(e.target.files?.[0] || null)} />
 
         <label className="text-sm font-semibold mt-2">Signature</label>
-        {profile.signature && (
-          <img src={profile.signature} className="h-12 mb-1" />
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setSignatureFile(e.target.files?.[0] || null)}
-        />
+        {profile.signature && <img src={profile.signature} className="h-12 mb-1" />}
+        <input type="file" accept="image/*" onChange={(e) => setSignatureFile(e.target.files?.[0] || null)} />
 
-        <button className="bg-blue-600 text-white rounded p-2 font-semibold mt-3">
-          Save
-        </button>
+        <button className="bg-blue-600 text-white rounded p-2 font-semibold mt-3">Save</button>
         <Link href="/">
-          <button className="bg-blue-600 text-white rounded p-2 font-semibold mt-3">
+          <button type="button" className="w-full bg-gray-200 text-gray-900 rounded p-2 font-semibold mt-1">
             Back
           </button>
         </Link>

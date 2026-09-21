@@ -13,12 +13,13 @@
   .box { border: 1px solid #000; padding: 10px; width: 48%; }
   .row { display: flex; justify-content: space-between; margin-top: 15px; }
   .signature-img { height: 50px; }
+  .due-notice { text-align: center; font-weight: bold; margin-top: 10px; }
 </style>
 </head>
 <body>
   <div class="header">
     <div>
-      {% if profile.logo %}<img class="logo" src="{{ profile.logo.path }}">{% endif %}
+      {% if logo_url %}<img class="logo" src="{{ logo_url }}">{% endif %}
       <p class="company-name">{{ profile.company_name }}</p>
       <p class="tagline">{{ profile.tagline }}</p>
     </div>
@@ -51,16 +52,18 @@
       <td>{{ item.amount }}</td>
     </tr>
     {% endfor %}
-    <tr><td colspan="3"><strong>TOTAL</strong></td><td>{{ doc.total }}</td></tr>
+    <tr><td colspan="2"><strong>E.&amp;O.E</strong></td><td><strong>TOTAL</strong></td><td>{{ doc.total }}</td></tr>
   </table>
+
+  <p class="due-notice">Accounts are due on demand</p>
 
   <p><strong>Amount in words:</strong> {{ doc.amount_in_words }}</p>
 
   <div class="row">
     <div></div>
     <div>
-      {% if profile.signature %}<img class="signature-img" src="{{ profile.signature.path }}">{% endif %}
-      <p>For & on behalf of {{ profile.company_name }}</p>
+      {% if signature_url %}<img class="signature-img" src="{{ signature_url }}">{% endif %}
+      <p>For &amp; on behalf of {{ profile.company_name }}</p>
     </div>
   </div>
 </body>
