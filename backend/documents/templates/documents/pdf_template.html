@@ -4,23 +4,31 @@
 <style>
   body { font-family: Arial, sans-serif; font-size: 13px; color: #111; }
 
-  .header { display: flex; justify-content: space-between; align-items: flex-start; }
+  /* Header table: logo cell | company details cell (centered) */
+  .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+  .header-table td { vertical-align: middle; padding: 0 10px; }
+  .header-logo-cell { width: 100px; }
   .logo { height: 70px; }
+  .header-details-cell { text-align: center; }
   .company-name { font-size: 22px; font-weight: bold; margin: 0; }
-  .tagline { margin: 0; }
+  .tagline { margin: 2px 0; }
+  .contact-line { font-size: 12px; margin: 2px 0; }
 
   .row { display: flex; justify-content: space-between; margin-top: 15px; gap: 15px; }
 
-  /* Left box: client info, underlined bold fields */
-  .box { border: 1px solid #000; padding: 10px; width: 48%; }
-  .box p { margin: 4px 0; }
+  /* Left box: now a table, underlined bold fields */
+  .client-table { border-collapse: collapse; width: 48%; }
+  .client-table td {
+    border: 1px solid #000;
+    padding: 6px 8px;
+  }
+  .client-table .label { font-weight: bold; width: 25%; white-space: nowrap; }
   .underline-bold {
     font-weight: bold;
     text-decoration: underline;
-    display: inline-block;
   }
 
-  /* Right box: real table for doc title / No / Date */
+  /* Right box: doc title / No / Date table */
   .doc-info-table { width: 48%; border-collapse: collapse; }
   .doc-info-table td, .doc-info-table th {
     border: 1px solid #000;
@@ -42,46 +50,48 @@
 
   .due-notice { text-align: center; font-weight: bold; margin-top: 10px; }
 
-  .amount-words {
-    margin-top: 12px;
-  }
+  .amount-words { margin-top: 12px; }
   .dotted-underline {
     text-decoration: underline;
     text-decoration-style: dotted;
     padding-right: 4px;
   }
 
-  .signature-block {
-    margin-top: 40px;
-    text-align: right;
-  }
+  .signature-block { margin-top: 40px; text-align: right; }
   .signature-img { height: 50px; }
-  .signature-line {
-    font-weight: normal;
-  }
   .signature-line strong { font-weight: bold; }
 </style>
 </head>
 <body>
 
-  <div class="header">
-    <div>
-      {% if logo_url %}<img class="logo" src="{{ logo_url }}">{% endif %}
-      <p class="company-name">{{ profile.company_name }}</p>
-      <p class="tagline">{{ profile.tagline }}</p>
-    </div>
-    <div>
-      <p>Tel: {{ profile.phone_1 }} {{ profile.phone_2 }}</p>
-      <p>{{ profile.address }}</p>
-    </div>
-  </div>
+  <table class="header-table">
+    <tr>
+      <td class="header-logo-cell">
+        {% if logo_url %}<img class="logo" src="{{ logo_url }}">{% endif %}
+      </td>
+      <td class="header-details-cell">
+        <p class="company-name">{{ profile.company_name }}</p>
+        <p class="tagline">{{ profile.tagline }}</p>
+        <p class="contact-line">Tel: {{ profile.phone_1 }} {{ profile.phone_2 }}</p>
+        <p class="contact-line">{{ profile.address }}</p>
+      </td>
+    </tr>
+  </table>
 
   <div class="row">
-    <div class="box">
-      <p><strong>M/s:</strong> <span class="underline-bold">{{ doc.client_name }}</span></p>
-      <p><span class="underline-bold">{{ doc.job_description }}</span></p>
-      <p><strong>Address:</strong> <span class="underline-bold">{{ doc.client_address }}</span></p>
-    </div>
+    <table class="client-table">
+      <tr>
+        <td class="label">M/s:</td>
+        <td><span class="underline-bold">{{ doc.client_name }}</span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="underline-bold">{{ doc.job_description }}</span></td>
+      </tr>
+      <tr>
+        <td class="label">Address:</td>
+        <td><span class="underline-bold">{{ doc.client_address }}</span></td>
+      </tr>
+    </table>
 
     <table class="doc-info-table">
       <tr><th colspan="2">{{ doc.get_doc_type_display|upper }}</th></tr>
