@@ -3,20 +3,67 @@
 <head>
 <style>
   body { font-family: Arial, sans-serif; font-size: 13px; color: #111; }
+
   .header { display: flex; justify-content: space-between; align-items: flex-start; }
   .logo { height: 70px; }
   .company-name { font-size: 22px; font-weight: bold; margin: 0; }
   .tagline { margin: 0; }
-  .doc-title { font-size: 20px; font-weight: bold; text-align: center; }
-  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-  th, td { border: 1px solid #000; padding: 6px 8px; text-align: left; }
+
+  .row { display: flex; justify-content: space-between; margin-top: 15px; gap: 15px; }
+
+  /* Left box: client info, underlined bold fields */
   .box { border: 1px solid #000; padding: 10px; width: 48%; }
-  .row { display: flex; justify-content: space-between; margin-top: 15px; }
-  .signature-img { height: 50px; }
+  .box p { margin: 4px 0; }
+  .underline-bold {
+    font-weight: bold;
+    text-decoration: underline;
+    display: inline-block;
+  }
+
+  /* Right box: real table for doc title / No / Date */
+  .doc-info-table { width: 48%; border-collapse: collapse; }
+  .doc-info-table td, .doc-info-table th {
+    border: 1px solid #000;
+    padding: 6px 8px;
+  }
+  .doc-info-table th {
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  .doc-info-table .label {
+    font-weight: bold;
+    width: 30%;
+  }
+
+  table.items { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  table.items th, table.items td { border: 1px solid #000; padding: 6px 8px; text-align: left; }
+  table.items th { font-weight: bold; }
+
   .due-notice { text-align: center; font-weight: bold; margin-top: 10px; }
+
+  .amount-words {
+    margin-top: 12px;
+  }
+  .dotted-underline {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    padding-right: 4px;
+  }
+
+  .signature-block {
+    margin-top: 40px;
+    text-align: right;
+  }
+  .signature-img { height: 50px; }
+  .signature-line {
+    font-weight: normal;
+  }
+  .signature-line strong { font-weight: bold; }
 </style>
 </head>
 <body>
+
   <div class="header">
     <div>
       {% if logo_url %}<img class="logo" src="{{ logo_url }}">{% endif %}
@@ -31,19 +78,31 @@
 
   <div class="row">
     <div class="box">
-      <p><strong>M/s:</strong> {{ doc.client_name }}</p>
-      <p>{{ doc.job_description }}</p>
-      <p><strong>Address:</strong> {{ doc.client_address }}</p>
+      <p><strong>M/s:</strong> <span class="underline-bold">{{ doc.client_name }}</span></p>
+      <p><span class="underline-bold">{{ doc.job_description }}</span></p>
+      <p><strong>Address:</strong> <span class="underline-bold">{{ doc.client_address }}</span></p>
     </div>
-    <div class="box">
-      <p class="doc-title">{{ doc.get_doc_type_display }}</p>
-      <p><strong>No:</strong> {{ doc.doc_number }}</p>
-      <p><strong>Date:</strong> {{ doc.date }}</p>
-    </div>
+
+    <table class="doc-info-table">
+      <tr><th colspan="2">{{ doc.get_doc_type_display|upper }}</th></tr>
+      <tr>
+        <td class="label">No.</td>
+        <td>{{ doc.doc_number }}</td>
+      </tr>
+      <tr>
+        <td class="label">Date</td>
+        <td>{{ doc.date }}</td>
+      </tr>
+    </table>
   </div>
 
-  <table>
-    <tr><th>QTY</th><th>PARTICULARS</th><th>RATE (UGX)</th><th>AMOUNT (UGX)</th></tr>
+  <table class="items">
+    <tr>
+      <th>QTY</th>
+      <th>PARTICULARS</th>
+      <th>RATE (UGX)</th>
+      <th>AMOUNT (UGX)</th>
+    </tr>
     {% for item in doc.items.all %}
     <tr>
       <td>{{ item.qty }}</td>
@@ -52,19 +111,24 @@
       <td>{{ item.amount }}</td>
     </tr>
     {% endfor %}
-    <tr><td colspan="2"><strong>E.&amp;O.E</strong></td><td><strong>TOTAL</strong></td><td>{{ doc.total }}</td></tr>
+    <tr>
+      <td colspan="2"><strong>E.&amp;O.E</strong></td>
+      <td><strong>TOTAL</strong></td>
+      <td>{{ doc.total }}</td>
+    </tr>
   </table>
 
   <p class="due-notice">Accounts are due on demand</p>
 
-  <p><strong>Amount in words:</strong> {{ doc.amount_in_words }}</p>
+  <p class="amount-words">
+    <strong>Amount in words:</strong>
+    <span class="dotted-underline">{{ doc.amount_in_words }}</span>
+  </p>
 
-  <div class="row">
-    <div></div>
-    <div>
-      {% if signature_url %}<img class="signature-img" src="{{ signature_url }}">{% endif %}
-      <p>For &amp; on behalf of {{ profile.company_name }}</p>
-    </div>
+  <div class="signature-block">
+    {% if signature_url %}<img class="signature-img" src="{{ signature_url }}"><br>{% endif %}
+    <p class="signature-line">For &amp; on behalf of <strong>{{ profile.company_name }}</strong></p>
   </div>
+
 </body>
 </html>
