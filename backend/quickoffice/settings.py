@@ -8,7 +8,7 @@ environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=True)
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["13.140.143.58"]
 
 
 # Application definition
@@ -119,16 +119,11 @@ MAILERS = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["documents.authentication.CsrfExemptSessionAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
-CORS_ALLOW_CREDENTIALS = True

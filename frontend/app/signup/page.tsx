@@ -13,7 +13,7 @@ export default function SignupPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/signup/`, {
+    const res = await fetch("/api/documents/signup/", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

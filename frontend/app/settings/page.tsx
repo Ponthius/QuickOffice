@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState<any>({});
@@ -10,9 +11,7 @@ export default function SettingsPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/profile/`, {
-      credentials: "include",
-    })
+    apiFetch("/documents/profile/")
       .then(async (r) => {
         if (!r.ok) {
           setError(`Could not load profile (status ${r.status}). Are you logged in?`);
@@ -36,9 +35,8 @@ export default function SettingsPage() {
     if (logoFile) form.append("logo", logoFile);
     if (signatureFile) form.append("signature", signatureFile);
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/profile/`, {
+    const res = await apiFetch("/documents/profile/", {
       method: "PATCH",
-      credentials: "include",
       body: form,
     });
 
