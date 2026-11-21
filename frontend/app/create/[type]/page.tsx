@@ -3,8 +3,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { numberToWords } from "@/lib/numberToWords";
 import { apiFetch } from "@/lib/api";
+import { clearDraft, readDraft, writeDraft } from "@/lib/drafts";
 
 type Item = { qty: string; particulars: string; rate: string; amount: string };
+type DocumentDraft = {
+  clientName: string;
+  jobDescription: string;
+  clientAddress: string;
+  date: string;
+  items: Item[];
+};
 
 const titles: Record<string, string> = {
   quotation: "QUOTATION",
@@ -31,12 +39,37 @@ export default function CreateDocument() {
     { qty: "", particulars: "", rate: "", amount: "" },
   ]);
   const [error, setError] = useState("");
+  const [authReady, setAuthReady] = useState(false);
+
+  const draftKey = `document:${type}`;
+
+  useEffect(() => {
+    const draft = readDraft<DocumentDraft>(draftKey);
+    if (!draft) return;
+    setClientName(draft.clientName || "");
+    setJobDescription(draft.jobDescription || "");
+    setClientAddress(draft.clientAddress || "");
+    setDate(draft.date || new Date().toISOString().split("T")[0]);
+    setItems(draft.items?.length ? draft.items : [{ qty: "", particulars: "", rate: "", amount: "" }]);
+  }, [draftKey]);
+
+  useEffect(() => {
+    if (!type) return;
+    writeDraft<DocumentDraft>(draftKey, {
+      clientName,
+      jobDescription,
+      clientAddress,
+      date,
+      items,
+    });
+  }, [draftKey, type, clientName, jobDescription, clientAddress, date, items]);
 
   useEffect(() => {
     apiFetch("/documents/profile/")
       .then((r) => r.json())
       .then(setProfile)
-      .catch(() => {}); // redirect already handled inside apiFetch
+      .catch(() => {})
+      .finally(() => setAuthReady(true)); // redirect already handled inside apiFetch
   }, []);
 
   function updateItem(index: number, field: keyof Item, value: string) {
@@ -51,6 +84,10 @@ export default function CreateDocument() {
 
   const total = items.reduce((sum, i) => sum + toNumber(i.amount), 0);
   const amountInWords = total ? `${numberToWords(total)} Shillings Only` : "";
+
+  if (!authReady) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-600">Checking login...</div>;
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,6 +111,7 @@ export default function CreateDocument() {
         }),
       });
       const blob = await res.blob();
+      clearDraft(draftKey);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

@@ -2,6 +2,15 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { clearDraft, readDraft, writeDraft } from "@/lib/drafts";
+
+type SettingsDraft = {
+  company_name?: string;
+  tagline?: string;
+  phone_1?: string;
+  phone_2?: string;
+  address?: string;
+};
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState<any>({});
@@ -9,6 +18,20 @@ export default function SettingsPage() {
   const [signatureFile, setSignatureFile] = useState<File | null>(null);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const draft = readDraft<SettingsDraft>("settings");
+    if (draft) setProfile((current: any) => ({ ...current, ...draft }));
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    const { company_name, tagline, phone_1, phone_2, address } = profile;
+    if (hydrated) {
+      writeDraft<SettingsDraft>("settings", { company_name, tagline, phone_1, phone_2, address });
+    }
+  }, [profile, hydrated]);
 
   useEffect(() => {
     apiFetch("/documents/profile/")
@@ -17,7 +40,8 @@ export default function SettingsPage() {
           setError(`Could not load profile (status ${r.status}). Are you logged in?`);
           return;
         }
-        setProfile(await r.json());
+        const draft = readDraft<SettingsDraft>("settings");
+        setProfile({ ...await r.json(), ...draft });
       });
   }, []);
 
@@ -47,6 +71,9 @@ export default function SettingsPage() {
     }
 
     setProfile(await res.json());
+    // setProfile triggers the autosave effect; clear after that render so a
+    // successfully saved profile does not immediately recreate the draft.
+    window.setTimeout(() => clearDraft("settings"), 0);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }

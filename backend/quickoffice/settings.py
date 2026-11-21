@@ -8,7 +8,7 @@ environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=True)
-ALLOWED_HOSTS = ["13.140.143.58"]
+ALLOWED_HOSTS = ["13.140.143.58", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -107,7 +107,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Email
@@ -120,8 +120,8 @@ MAILERS = {
 }
 
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["documents.authentication.CsrfExemptSessionAuthentication"],

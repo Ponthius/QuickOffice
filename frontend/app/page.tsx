@@ -1,4 +1,7 @@
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 const docTypes = [
   { type: "quotation", label: "Quotation" },
@@ -8,6 +11,22 @@ const docTypes = [
 ];
 
 export default function Home() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    apiFetch("/documents/profile/")
+      .then((response) => {
+        if (response.ok) setReady(true);
+      })
+      .catch(() => {
+        // apiFetch redirects unauthenticated users to /login.
+      });
+  }, []);
+
+  if (!ready) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-600">Checking login...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center gap-6">
       <h1 className="text-2xl font-bold text-gray-900">QuickOffice</h1>
