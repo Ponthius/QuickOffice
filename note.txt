@@ -1,55 +1,138 @@
-(venv) 
-Ponthius Poel@POEL-WORKSAPCE MINGW64 ~/QuickOffice/backend (main)
-$ ls documents/
-__init__.py  __pycache__/  admin.py  apps.py  migrations/  models.py  tests.py  utils.py  views.py
-(venv) 
-Ponthius Poel@POEL-WORKSAPCE MINGW64 ~/QuickOffice/backend (main)
-$ python manage.py check
-System check identified no issues (0 silenced).
-(venv) 
-Ponthius Poel@POEL-WORKSAPCE MINGW64 ~/QuickOffice/backend (main)
-$ python manage.py makemigrations documents
-Migrations for 'documents':
-  documents\migrations\0001_initial.py
-    + Create model CompanyProfile
-    + Create model Document
-    + Create model DocumentItem
-(venv) 
-Ponthius Poel@POEL-WORKSAPCE MINGW64 ~/QuickOffice/backend (main)
-$ python manage.py migrate
-Operations to perform:
-  Apply all migrations: admin, auth, contenttypes, documents, sessions
-Running migrations:
-  Applying contenttypes.0001_initial... OK
-  Applying auth.0001_initial... OK
-  Applying admin.0001_initial... OK
-  Applying admin.0002_logentry_remove_auto_add... OK
-  Applying admin.0003_logentry_add_action_flag_choices... OK
-  Applying contenttypes.0002_remove_content_type_name... OK
-  Applying auth.0002_alter_permission_name_max_length... OK
-  Applying auth.0003_alter_user_email_max_length... OK
-  Applying auth.0004_alter_user_username_opts... OK
-  Applying auth.0005_alter_user_last_login_null... OK
-  Applying auth.0006_require_contenttypes_0002... OK
-  Applying auth.0007_alter_validators_add_error_messages... OK
-  Applying auth.0008_alter_user_username_max_length... OK
-  Applying auth.0009_alter_user_last_name_max_length... OK
-  Applying auth.0010_alter_group_name_max_length... OK
-  Applying auth.0011_update_proxy_permissions... OK
-  Applying auth.0012_alter_user_first_name_max_length... OK
-  Applying documents.0001_initial... OK
-  Applying sessions.0001_initial... OK
-(venv) 
-Ponthius Poel@POEL-WORKSAPCE MINGW64 ~/QuickOffice/backend (main)
-$ python manage.py createsuperuser
-Username (leave blank to use 'ponthiuspoel'): ponthius
-Email address: ponthiuspaul@gmail.com
-Password: 
-Password (again): 
-Superuser created successfully.
-(venv) 
-Ponthius Poel@POEL-WORKSAPCE MINGW64 ~/QuickOffice/backend (main)
-$
+project is deployed on vercel "Skip to content\
+\
+Find\
+F\
+\
+Overview\
+Deployments\
+CI\
+Logs\
+Traces\
+Analytics\
+Speed Insights\
+Observability\
+Firewall\
+CDN\
+Environment Variables\
+Domains\
+Connect\
+Integrations\
+Storage\
+Flags\
+Agent\
+Vulnerabilities\
+AI Gateway\
+Sandboxes\
+Workflows\
+Images\
+Drives\
+Daemons\
+Usage\
+Support\
+Settings\
+\
+Avatar for ponthiuspaul-9767\
+ponthiuspaul-9767\
+\
+Overview\
+Production Deployment\
+Deployment\
+quick-office-fvc0c6tqe-braitinc.vercel.app\
+Domains\
+quick-office-project.vercel.app\
+Status\
+Ready\
+Created\
+22h ago by Ponthius\
+\
+github/Ponthius\
+Source\
+main\
+82268fe\
+fix(login):Fix the redirect loop.\
+\
+Deployment Settings\
+3 Recommendations\
+To update your Production Deployment, push to the main branch.\
+\
+Observability\
+\
+6h\
+CDN Requests\
+23\
+Function Invocations\
+0\
+Error Rate\
+0%\
+\
+Active Branches\
+\
+No Active Branches\
+Commit using our Git connections.\
+\
+" and on contabo server&#x20;
 
-Connecting to my database;
-psql -U postgres -h 127.0.0.1 -c "CREATE DATABASE quickoffice;"
+
+I used mock passwords I did'nt expose them to chat you might noticed Grandtheftauto it came to mind since gta vi was released but it's just a place holder although vercel has no env variables "Skip to content\
+\
+Find\
+F\
+\
+Overview\
+Deployments\
+CI\
+Logs\
+Traces\
+Analytics\
+Speed Insights\
+Observability\
+Firewall\
+CDN\
+Environment Variables\
+Domains\
+Connect\
+Integrations\
+Storage\
+Flags\
+Agent\
+Vulnerabilities\
+AI Gateway\
+Sandboxes\
+Workflows\
+Images\
+Drives\
+Daemons\
+Usage\
+Support\
+Settings\
+Token Pass\
+-80%\
+Get an 80% discount on tokens in your editor with Token Pass.\
+\
+Avatar for ponthiuspaul-9767\
+ponthiuspaul-9767\
+\
+\
+Environment Variables\
+Environment Variables\
+Store API keys, tokens, and config securely. Learn more about environment variables · Separate Production Secret Values\
+\
+Project\
+Shared\
+Search variables…\
+\
+All Types\
+All Environments\
+All Editors\
+\
+All Variables\
+\
+Last Updated\
+No Environment Variables Added\
+Add Environment Variables to Production, Preview, and Development environments, including branches in Preview.\
+\
+Enable access to System Environment Variables\
+" on localhost vs code it worked and I created a couple of docs but on deployed vercel its stuck on checking login
+
+
+I pulled latest commit on server though it still shows Checking login maybe the reason it has no envs in vercel is because it's using next api routes idk

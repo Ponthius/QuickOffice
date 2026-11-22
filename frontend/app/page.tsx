@@ -12,16 +12,23 @@ const docTypes = [
 
 export default function Home() {
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     apiFetch("/documents/profile/")
       .then((response) => {
         if (response.ok) setReady(true);
+        else setError(`Could not connect to the backend (status ${response.status}).`);
       })
       .catch(() => {
         // apiFetch redirects unauthenticated users to /login.
+        setError("Could not connect to the backend.");
       });
   }, []);
+
+  if (error) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center text-red-600">{error}</div>;
+  }
 
   if (!ready) {
     return <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-600">Checking login...</div>;
