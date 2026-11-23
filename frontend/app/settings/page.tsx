@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { clearDraft, readDraft, writeDraft } from "@/lib/drafts";
+import { mediaUrl } from "@/lib/media";
 
 type SettingsDraft = {
   company_name?: string;
@@ -120,11 +121,11 @@ export default function SettingsPage() {
         />
 
         <label className="text-sm font-semibold mt-2">Logo</label>
-        {profile.logo && <img src={profile.logo} className="h-16 mb-1" />}
+        {profile.logo && <img src={mediaUrl(profile.logo)} className="h-16 mb-1" />}
         <input type="file" accept="image/*" onChange={(e) => setLogoFile(e.target.files?.[0] || null)} />
 
         <label className="text-sm font-semibold mt-2">Signature</label>
-        {profile.signature && <img src={profile.signature} className="h-12 mb-1" />}
+        {profile.signature && <img src={mediaUrl(profile.signature)} className="h-12 mb-1" />}
         <input type="file" accept="image/*" onChange={(e) => setSignatureFile(e.target.files?.[0] || null)} />
 
         <button className="bg-blue-600 text-white rounded p-2 font-semibold mt-3">Save</button>

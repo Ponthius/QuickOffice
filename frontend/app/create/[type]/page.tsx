@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { numberToWords } from "@/lib/numberToWords";
 import { apiFetch } from "@/lib/api";
 import { clearDraft, readDraft, writeDraft } from "@/lib/drafts";
+import { mediaUrl } from "@/lib/media";
 
 type Item = { qty: string; particulars: string; rate: string; amount: string };
 type DocumentDraft = {
@@ -140,7 +141,7 @@ export default function CreateDocument() {
       >
         <div className="flex justify-between items-start border-b pb-4 mb-4">
           <div>
-            {profile.logo && <img src={profile.logo} className="h-16 mb-2" />}
+            {profile.logo && <img src={mediaUrl(profile.logo)} className="h-16 mb-2" />}
             <p className="text-xl font-bold uppercase">
               {profile.company_name}
             </p>

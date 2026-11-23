@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         // override this with BACKEND_URL (for example, port 8001).
         destination: `${backendUrl}/api/:path*`,
       },
+      {
+        source: "/media/:path*",
+        destination: `${backendUrl}/media/:path*`,
+      },
     ];
   },
 };
